@@ -342,5 +342,28 @@ python manage.py createsuperuser
           return reverse("users:detail", kwargs={"username": self.username})
   ```
 
-  
+
+
+##  20. Creating the Image Model
+
+```python
+class TimeStampedModel(models.Model):
+    '''
+    모든 모델에 공통적으로 사용되는
+    created_at, updated_at 부분을 따로 추상화 시켜서 추상 클래스화 한다.
+    '''
+    created_at = models.DateTimeField(("Created Date"), auto_now_add=True)
+    updated_at = models.DateTimeField(("Updated Date"), auto_now=True)
+
+    # 추상 클래스로 지정
+    class Meta:
+        abstract = True
+
+
+class Image(TimeStampedModel):
+    '''
+    위와 같이 상속 받아서 사용한다.
+    '''
+    ....
+```
 
