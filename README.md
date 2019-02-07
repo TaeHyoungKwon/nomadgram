@@ -367,3 +367,116 @@ class Image(TimeStampedModel):
     ....
 ```
 
+
+
+
+
+
+
+## 21. Explaining Model Relationships
+
+```python
+'''
+one to many
+1명의 주인은 여러 고양이를 가지고 있다.
+1명의 유저가 여러개의 글을 올린다.
+1개의 글이 여러개의 좋아요를 받았다.
+
+'''
+
+
+from django.db import models
+
+
+class Owner(models.Model):
+    name = models.CharField(amx_length=100)
+    last_name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    
+
+class Cat(models.Model):
+    name = models.CharField(max_length=100)
+    breed = models.CharField(max_length=100)
+    grumpy = models.BooleanField(max_length=100)
+    #owner를 Foreignkey로 지정해줌으로써, Owner와 Cat은 one to many의 관계를 가진다.
+    owner = models.ForeignKey(Owner, max_length=100, null=Ture)    
+```
+
+
+
+![image-20190208051943061](assets/image-20190208051943061.png)
+
+
+
+* ```python
+  #이 부분에서, 파이썬 코드 상으로 owner를 지정할 때는 owner 객체 자체를 할당하는 것을 볼 수 있다.
+  bunns.owner = nicolas
+  ```
+
+  
+
+
+
+![image-20190208051829421](assets/image-20190208051829421.png)
+
+
+
+* 디비 테이블 상에서는 Owner의 id 값을 가지고 있는다.
+
+
+
+* Django _set
+
+  * 고양이 오브젝트안에 외래키가 있다면,
+
+  * 외래키는 주인 모델을 향하고 주인 모델은 새로운 속성을 갖게되는데, cat-set 이다.
+
+    ```python
+    nicolas = Owner.bojects.get(pk=1)
+    nico_cats = nocolas.cat_set.all()
+    ```
+
+    
+
+  ![image-20190208052346408](assets/image-20190208052346408.png)
+
+
+
+
+
+* Many To Many
+
+  * 많은 유저들이 서로 팔로우를 맺을 수 있다.
+
+    ```python
+    class Owner(models.Model):
+        ...
+        follwoing = modesl.ManyToManyField('self')
+        follwers = models.ManyToManyField('self')
+    ```
+
+  ![image-20190208052636201](assets/image-20190208052636201.png)
+
+
+
+![image-20190208052736755](assets/image-20190208052736755.png)
+
+
+
+```python
+nicolas = Owner.objects.get(pk=1)
+pedro = Owner.objects.get(pk=2)
+jisu = Owner.objects.get(pk=3)
+```
+
+
+
+```python
+#지수와 페드로가 니콜라스를 팔로우 할 때
+nicolas.follwers.add(jisu, pedro)
+```
+
+![image-20190208052913190](assets/image-20190208052913190.png)
+
+
+
