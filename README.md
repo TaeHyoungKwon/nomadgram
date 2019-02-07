@@ -185,5 +185,162 @@ LOCAL_APPS = [
 
 
 
+# 13. Parts of a Django App-Models and Views
 
+* Django APP
+  * models
+  * urls
+    * 장고의 url은 전체 어플리케이션에서 모든 url을 가져온다.
+    * 이 urls는 어플리케이션의 urls 이다
+  * views
+    * url에 매핑되는 views에 있는 함수가 실행된다.
+    * 해당 함수는 모델과 커뮤니케이션 하면서, 요청에 해당하는 쿼리셋 객체를 리턴한다.
+
+
+
+## 14. What is the Django ORM?
+
+* ORM
+
+  * sql과 django 사이에 통역사 역할을 한다.
+
+  ```python
+  #QuerySet
+  User.objects.filter(country="colombia").order_by('created_date')
+  
+  #Query
+  SELECT * FROM users WHERE country="colombia" ORDER BY created_date
+  ```
+
+* python으로 코드를 짰을 때, 해당하는 SQL 쿼리를 생성하여서, DB에 쿼리한다.
+
+
+
+
+
+## 15. Recap-Class Inheritance
+
+```python
+#코드가 중복된다.
+class Cat():
+    legs = 4
+    eyes = 2
+    nose = 1
+    
+class BritishCat():
+    legs = 4
+    eyes = 4
+    nose = 1
+    breed = 'british'   
+    
+# 더 상위 개념인 Cat을 상속한다.
+
+class BritishCat(Cat):
+    breed = 'british'
+    
+    
+BritishCat.legs # 4
+BritishCat.breed # british
+```
+
+
+
+
+
+## 16. Understanding Django Models and Fields
+
+* Models
+
+  * python class로 만들어진다.
+
+  * 모델을 번역해서, 데이터베이스 테이블을 만든다.
+
+  * Field
+
+    * 어떤 종류의 데이터를 디비에 저정할 것인지를 장고에 말해준다.
+
+    ```python
+    form django.db import models
+    
+    class Cat(models.Model):
+        name = models.CharField(max_length=30)
+        breed = models.CharField(max_length=20)
+    ```
+
+  * create
+
+    ```python
+    Cat.objects.create(name="Fluffy", breed="Persian")
+    ```
+
+  * find
+
+    ```python
+    cat = Cat.objects.get(id=1)
+    ```
+
+  * filter()
+
+    ```python
+    cats = Cat.objects.filter(name__startswith="Mr")
+    ```
+
+
+
+## 17. Migrating
+
+* 모델의 모양을 바꾸기위해서하는 데이터베이스 프로세스
+* Models.py에 모델을 정의하고, 마이그레이션을 해줘야 데이터베이스에서 해당하는 모델을 인식하고 테이블을 생성할 수 있다. 
+* 마이그레이션은 프로젝트 내에서, 모델을 디비에 어떤식으로 반영할 것인지에 대한 내역서 같은 것이고,
+* 실제로 데이터베이스에 직접 반영할 때는 migrate를 한다.
+
+
+
+## 18. Creating a super user
+
+```shell
+python manage.py createsuperuser
+```
+
+
+
+
+
+## 19. Creating the User Model
+
+* 공백으로 남겨두기
+
+  `null=True`
+
+* User 모델 수정
+
+  ```python
+  # users/models.py
+  
+  '''
+  AbstractUser를 상속받는 User Class에서,
+  추가적으로 필요한 필드를 정의할 수 있다.
+  '''
+  
+  class User(AbstractUser):
+      # gender를 CharField로 지정하였기 때문에, 어떤 문자열도 올 수 있다.
+      # gender에 대해서 일정부분만 지정하기 위해선 다음과 같이 해주고,
+      # choices 옵션을 추가한다.
+      GENDER_CHOICES = (
+          ('male', 'Male'),
+          ('female', 'Female'),
+          ('not-specified', 'Not specified')
+      )
+  
+      name = models.CharField(_("Name of User"), blank=True, max_length=255)
+      website = models.URLField(_("Website"), max_length=200, null=True)
+      bio = models.TextField(_("Bio"), null=True)
+      phone = models.CharField(_("Phone Number"), max_length=140, null=True)
+      gender = models.CharField(_("Gender"), max_length=80, choices=GENDER_CHOICES, null=True)
+  
+      def get_absolute_url(self):
+          return reverse("users:detail", kwargs={"username": self.username})
+  ```
+
+  
 
