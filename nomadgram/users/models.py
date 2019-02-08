@@ -21,8 +21,8 @@ class User(AbstractUser):
     gender = models.CharField(_("Gender"), max_length=80, choices=GENDER_CHOICES, null=True)
 
     # 팔로잉 팔오워 모두, 자기 자신에게 연결한다.
-    followers = models.ManyToManyField("self", verbose_name=_("팔로워"))
-    following = models.ManyToManyField("self", verbose_name=("팔로잉"))
+    followers = models.ManyToManyField("self", verbose_name=_("나를 팔로워 하고 있는 유저들"))
+    following = models.ManyToManyField("self", verbose_name=("내가 팔로잉 하고 있는 유저들"))
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
