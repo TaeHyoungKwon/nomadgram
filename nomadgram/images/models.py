@@ -19,9 +19,9 @@ class Image(TimeStampedModel):
     '''
     Image Model
     '''
-    file = models.ImageField(("Image"), upload_to=None, height_field=None, width_field=None, max_length=None)
-    location = models.CharField(("Location"), max_length=50)
-    caption = models.TextField(("Caption"))
+    file = models.ImageField(("이미지"))
+    location = models.CharField(("장소"), max_length=50)
+    caption = models.TextField(("내용"))
     # 각 작성자는 여러개의 이미지를 작성할 수 있다.
     creator = models.ForeignKey(user_models.User, verbose_name=("image_작성자"), on_delete=models.CASCADE, null=True)
 
