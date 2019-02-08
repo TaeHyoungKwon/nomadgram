@@ -536,3 +536,20 @@ class Like(TimeStampedModel):
 
 ```
 
+
+
+
+
+## 23. Creating Following Follower Relationships
+
+```python
+class User(AbstractUser):
+    ...
+
+    # 팔로잉 팔로워 모두, 자기 자신에게 연결한다.
+    followers = models.ManyToManyField("self", verbose_name=_("팔로워"))
+    following = models.ManyToManyField("self", verbose_name=("팔로잉"))
+    
+	...
+```
+
