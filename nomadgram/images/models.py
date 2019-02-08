@@ -23,18 +23,27 @@ class Image(TimeStampedModel):
     location = models.CharField(("장소"), max_length=50)
     caption = models.TextField(("내용"))
     # 각 작성자는 여러개의 이미지를 작성할 수 있다.
-    creator = models.ForeignKey(user_models.User, verbose_name=("image_작성자"), on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey(
+        user_models.User,
+        verbose_name=("image_작성자"),
+        on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str("{} - {}".format(self.location, self.caption))
 
 
 class Comment(TimeStampedModel):
     ''' 
     Comment Model 
     '''
-    message = models.TextField(("Message"))
+    message = models.TextField(("메세지"))
     # 작성자는 여러개의 comment를 쓸 수 있다.
     creator = models.ForeignKey(user_models.User, verbose_name=("comment_작성자"), on_delete=models.CASCADE, null=True)
     # 각 이미지는 여러개의 comment 를 가진다.
     image = models.ForeignKey(Image, verbose_name=("comment_이미지"), on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str('{} : {}'.format("Comment", self.message))
 
 
 class Like(TimeStampedModel):
@@ -45,3 +54,6 @@ class Like(TimeStampedModel):
     creator = models.ForeignKey(user_models.User, verbose_name=("like_작성자"), on_delete=models.CASCADE, null=True)
     # 각 이미지는 여러개의 Like를 가진다.
     image = models.ForeignKey(Image, verbose_name=("like_이미지"), on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str('User: {} - Image Caption: {}'.format(self.creator.username, self.image.caption))
