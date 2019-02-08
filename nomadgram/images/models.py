@@ -1,4 +1,5 @@
 from django.db import models
+from nomadgram.users import models as user_models
 
 
 class TimeStampedModel(models.Model):
@@ -15,10 +16,32 @@ class TimeStampedModel(models.Model):
 
 
 class Image(TimeStampedModel):
+    '''
+    Image Model
+    '''
     file = models.ImageField(("Image"), upload_to=None, height_field=None, width_field=None, max_length=None)
     location = models.CharField(("Location"), max_length=50)
     caption = models.TextField(("Caption"))
+    # 각 작성자는 여러개의 이미지를 작성할 수 있다.
+    creator = models.ForeignKey(user_models.User, verbose_name=("image_작성자"), on_delete=models.CASCADE, null=True)
 
 
 class Comment(TimeStampedModel):
+    ''' 
+    Comment Model 
+    '''
     message = models.TextField(("Message"))
+    # 작성자는 여러개의 comment를 쓸 수 있다.
+    creator = models.ForeignKey(user_models.User, verbose_name=("comment_작성자"), on_delete=models.CASCADE, null=True)
+    # 각 이미지는 여러개의 comment 를 가진다.
+    image = models.ForeignKey(Image, verbose_name=("comment_이미지"), on_delete=models.CASCADE, null=True)
+
+
+class Like(TimeStampedModel):
+    '''
+    Like Model
+    '''
+    # 각각 사람들은 여러개의 좋아요를 가진다.
+    creator = models.ForeignKey(user_models.User, verbose_name=("like_작성자"), on_delete=models.CASCADE, null=True)
+    # 각 이미지는 여러개의 Like를 가진다.
+    image = models.ForeignKey(Image, verbose_name=("like_이미지"), on_delete=models.CASCADE, null=True)
