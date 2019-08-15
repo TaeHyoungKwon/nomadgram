@@ -1,16 +1,20 @@
 from django.urls import path
 
 from nomadgram.users.views import (
-    user_list_view,
-    user_redirect_view,
-    user_update_view,
-    user_detail_view,
+    ExplorerUsers,
+    FollowUser,
+    UnFollowUser,
+    UserProfile,
+    UserFollowers,
+    UserFollowing
 )
 
 app_name = "users"
 urlpatterns = [
-    path("", view=user_list_view, name="list"),
-    path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<str:username>/", view=user_detail_view, name="detail"),
+    path("explore/", view=ExplorerUsers.as_view(), name="user_list"),
+    path("<int:user_id>/follow/", view=FollowUser.as_view(), name="follow_user"),
+    path("<int:user_id>/unfollow/", view=UnFollowUser.as_view(), name="unfollow_user"),
+    path("<str:username>/", view=UserProfile.as_view(), name="user_profile"),
+    path("<str:username>/followers/", view=UserFollowers.as_view(), name="user_followers"),
+    path("<str:username>/following/", view=UserFollowing.as_view(), name="user_following"),
 ]

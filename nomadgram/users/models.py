@@ -14,6 +14,7 @@ class User(AbstractUser):
         ('not-specified', 'Not specified')
     )
 
+    profile_image = models.ImageField(null=True)
     name = models.CharField(_("Name of User"), blank=True, max_length=255)
     website = models.URLField(_("Website"), max_length=200, null=True)
     bio = models.TextField(_("Bio"), null=True)
@@ -21,8 +22,20 @@ class User(AbstractUser):
     gender = models.CharField(_("Gender"), max_length=80, choices=GENDER_CHOICES, null=True)
 
     # 팔로잉 팔오워 모두, 자기 자신에게 연결한다.
-    followers = models.ManyToManyField("self", verbose_name=_("나를 팔로워 하고 있는 유저들"))
-    following = models.ManyToManyField("self", verbose_name=("내가 팔로잉 하고 있는 유저들"))
+    followers = models.ManyToManyField("self", verbose_name=_("나를 팔로워 하고 있는 유저들"), blank=True)
+    following = models.ManyToManyField("self", verbose_name=("내가 팔로잉 하고 있는 유저들"), blank=True)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
+
+    @property
+    def post_count(self):
+        return self.image_set.all().count()
+
+    @property
+    def following_count(self):
+        return self.following.all().count()
+
+    @property
+    def followers_count(self):
+        return self.followers.all().count()

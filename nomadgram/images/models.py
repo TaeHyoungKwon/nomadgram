@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 from nomadgram.users import models as user_models
 
 
@@ -30,6 +31,18 @@ class Image(TimeStampedModel):
 
     def __str__(self):
         return str("{} - {}".format(self.location, self.caption))
+
+    class Meta:
+        ordering=['-created_at']
+
+    @cached_property
+    def like_count(self):
+        return self.like_set.all().count()
+
+    @cached_property
+    def comment_count(self):
+        return self.comment_set.all().count()
+
 
 
 class Comment(TimeStampedModel):
