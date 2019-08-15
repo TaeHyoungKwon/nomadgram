@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.functional import cached_property
+from taggit.managers import TaggableManager
 from nomadgram.users import models as user_models
 
 
@@ -28,6 +29,7 @@ class Image(TimeStampedModel):
         user_models.User,
         verbose_name=("image_작성자"),
         on_delete=models.CASCADE, null=True)
+    tags = TaggableManager()
 
     def __str__(self):
         return str("{} - {}".format(self.location, self.caption))

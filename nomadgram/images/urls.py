@@ -6,5 +6,10 @@ urlpatterns = [
     path("",
          view=views.Feed.as_view(),
          name="all_images"
-    )
+    ),
+    path("search/",
+         view=views.Search.as_view(),
+         name="search"
+    ),
+
     ]

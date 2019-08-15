@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from nomadgram.users.models import User
-from nomadgram.images.serializers import UserProfileImageSerializer
+from nomadgram.images.serializers import CountImageSerializer
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    image_set = UserProfileImageSerializer(many=True)
+    image_set = CountImageSerializer(many=True)
 
     class Meta:
         model = User

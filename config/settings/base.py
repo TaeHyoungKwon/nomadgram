@@ -68,6 +68,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'taggit', # Tags for the photo
 ]
 LOCAL_APPS = [
     'nomadgram.users.apps.UsersAppConfig',
@@ -248,5 +249,4 @@ ACCOUNT_ADAPTER = 'nomadgram.users.adapters.AccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'nomadgram.users.adapters.SocialAccountAdapter'
 
 
-# Your stuff...
-# ------------------------------------------------------------------------------
+TAGGIT_CASE_INSENSITIVE = True

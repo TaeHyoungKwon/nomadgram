@@ -87,3 +87,14 @@ class UserFollowing(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class Search(APIView):
+    def get(self, request, foramt=None):
+        username = request.query_params.get('username', None)
+
+        if username is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        users = User.objects.filter(username__icontains=username)
+        serializer = ListUserSerializer(users, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
